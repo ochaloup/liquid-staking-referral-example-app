@@ -16,9 +16,12 @@ export const Deposit: FC<DepositComponentProps> = ({ onError, onTransaction }) =
   const [amount, setAmount] = useState(0)
   const [processingTransaction, setProcessingTransaction] = useState(false)
 
-  const { connection } = useConnection()
   const { sendTransaction } = useWallet()
   const { marinade } = useMarinade()
+  if (marinade === null) {
+    throw new Error("Marinade config was not received")
+  }
+  const connection = marinade.config.connection
 
   if (!marinade) {
     return <></>
@@ -38,7 +41,12 @@ export const Deposit: FC<DepositComponentProps> = ({ onError, onTransaction }) =
         try {
           setProcessingTransaction(true)
           const { transaction } = await marinade.deposit(MarinadeUtils.solToLamports(amount))
-          const transactionSignature = await sendTransaction(transaction, connection)
+          const opts = {
+            preflightCommitment: "recent",
+          };
+          const transactionSignature = await sendTransaction(transaction, connection, {
+            skipPreflight: true,
+          });
           onTransaction?.(transactionSignature)
         } catch (err) {
           if (err instanceof Error && !(err instanceof WalletError)) {

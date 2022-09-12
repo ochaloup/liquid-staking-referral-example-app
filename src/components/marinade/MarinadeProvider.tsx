@@ -27,7 +27,8 @@ export const MarinadeProvider: FC<MarinadeProviderProps> = ({ children }) => {
     }
 
     // !!! You have to put in your own Referral Code on the line below !!!
-    const referralCode = new web3.PublicKey('CRiqV9QCSJ2GLrMDSE8yi9MzSzMvNY2fActLQXdxz2fv')  // partner referral account / referral-keypair from setup-referral
+    // node ~/liquid-staking-referral-cli/dist/marinade-referral.js -c http://localhost:8899 show `solana-keygen pubkey keys/referral-state.json`
+    const referralCode = new web3.PublicKey('CRiqV9QCSJ2GLrMDSE8yi9MzSzMvNY2fActLQXdxz2fv')  // referral account / referral-keypair from setup-referral
     // !!! Then uncomment the `referralCode` configuration option !!!
 
     const localConnection = new web3.Connection("http://localhost:8899")
@@ -35,11 +36,11 @@ export const MarinadeProvider: FC<MarinadeProviderProps> = ({ children }) => {
       connection: localConnection,
       publicKey,  // wallet pubkey
       marinadeFinanceProgramId: new web3.PublicKey('MarBmsSgKXdrN1egZf5sqe1TMai9K1rChYNDJgjq7aD'),  // this is default value
-      marinadeReferralProgramId: new web3.PublicKey('NTxC2LBrYLBtCmzTUJCWTxiHMYCJfeiEgzkhxCaGM3S'),
-      marinadeStateAddress: new web3.PublicKey('6d5c9xHMWWmwd8eFfvqhSnXdHMSYcJzwyPmXEpykqSxp'),  // marinade instance
-      marinadeReferralGlobalStateAddress: new web3.PublicKey('AR9emZP2faAG9NAM5nKvPt2j9w4piU2d5VpeA8TGy7vA'),
+      marinadeReferralProgramId: new web3.PublicKey('NTxC2LBrYLBtCmzTUJCWTxiHMYCJfeiEgzkhxCaGM3S'),  // solana-keygen pubkey ~/marinade/liquid-staking-referral-program/target/deploy/marinade_referral-keypair.json
+      marinadeStateAddress: new web3.PublicKey('J797wwZfauQivM4VUSzFUPRTpaXTrRtnV6tjvgt3fozH'),  // marinade instance; cat ~/marinade/marinade-anchor/keys/instance.pubkey
+      marinadeReferralGlobalStateAddress: new web3.PublicKey('AR9emZP2faAG9NAM5nKvPt2j9w4piU2d5VpeA8TGy7vA'), // solana-keygen pubkey ~/marinade/liquid-staking-referral-cli/keys/global.json
       referralCode,   // partner referral state account
-      referralPartnerAccount: new web3.PublicKey('2f7svTzicpawmpywwfnGfv5T8UxP2sb4yrTkePF4GQWL'), // partner beneficiary account (partner main account)
+      tokenPartnerAccount: new web3.PublicKey('FYXVvGAhRhFw2M5MTMV8AkGoYRx4KuC7bpne7pMifRmN'), // partner ATA account; node dist/marinade-referral.js -c http://localhost:8899 show `solana-keygen pubkey ~/marinade/liquid-staking-referral-cli/keys/referral-state.json`
     })
     const marinade = new Marinade(config)
 
